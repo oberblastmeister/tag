@@ -1,0 +1,127 @@
+cabal-version: 3.6
+name: tag
+version: 0.1.0.0
+synopsis: Extensible dependent tag 
+description: Extensible dependent tag  
+-- A URL where users can report bugs.
+-- bug-reports:
+
+-- The license under which the package is released.
+-- license:
+author:             brian
+maintainer:         littlebubu.shu@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+tested-with: GHC == 8.10.7, GHC == 9.0.2, GHC == 9.2.4, GHC == 9.4.2
+
+common common-options
+  default-extensions:
+    FlexibleInstances,
+    FlexibleContexts,
+    InstanceSigs,
+    MultiParamTypeClasses,
+    ConstraintKinds,
+    LambdaCase,
+    EmptyCase,
+    TupleSections,
+    BangPatterns,
+    TypeApplications,
+    StandaloneDeriving,
+    OverloadedStrings,
+    RankNTypes,
+    ScopedTypeVariables,
+    DataKinds,
+    ConstraintKinds,
+    TypeApplications,
+    KindSignatures,
+    DeriveFoldable,
+    DeriveFunctor,
+    DeriveGeneric,
+    DeriveDataTypeable,
+    DeriveLift,
+    DeriveTraversable,
+    GeneralizedNewtypeDeriving,
+    GADTs,
+    PolyKinds,
+    ViewPatterns,
+    PatternSynonyms,
+    TypeFamilies,
+    TypeFamilyDependencies,
+    FunctionalDependencies,
+    QuantifiedConstraints,
+    StandaloneKindSignatures,
+    ExistentialQuantification,
+    TypeOperators,
+    BlockArguments,
+    ImportQualifiedPost,
+    MagicHash,
+    UnboxedTuples,
+    UnboxedSums,
+    RoleAnnotations,
+  ghc-options:
+    -Wall
+    -Wredundant-constraints
+    -Wno-name-shadowing
+    -- until OverloadedRecordUpdate stabilizes
+    -Wno-ambiguous-fields
+    -Wno-unticked-promoted-constructors
+    -Wno-partial-type-signatures
+    -Werror=incomplete-patterns
+    -Werror=incomplete-uni-patterns
+    -Werror=missing-methods
+    -Werror=incomplete-record-updates
+    -Wcpp-undef
+    -Widentities
+  build-depends:
+    base >= 4.12 && <5,
+    containers,
+    primitive,
+    deepseq,
+    some,
+    hashable,
+
+library
+  import: common-options
+  hs-source-dirs: src
+  exposed-modules:
+    Data.Tag
+      Data.Tag.Sum
+      Data.Tag.Vec
+        Data.Tag.Vec.Internal
+      Data.Tag.Internal
+      Data.Tag.Internal.Utils
+
+common rtsopts
+  ghc-options:
+    -threaded
+    -rtsopts
+    -with-rtsopts=-N
+  
+test-suite tag-test
+  import: common-options, rtsopts
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Spec.hs
+  other-modules:
+    TagSpec
+  build-depends:
+    tag,
+    hspec,
+    QuickCheck,
+    quickcheck-instances,
+  build-tool-depends:
+    hspec-discover:hspec-discover,
+  if impl(ghc >= 9.2.2)
+    ghc-options: -fcheck-prim-bounds
+
+benchmark bench
+  import: common-options, rtsopts
+  type: exitcode-stdio-1.0
+  hs-source-dirs: bench
+  main-is: Main.hs
+  other-modules:
+  ghc-options: -O2
+  build-depends:
+    tag
