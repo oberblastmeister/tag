@@ -1,5 +1,6 @@
 module Data.Tag.Sum where
 
+import Data.Functor.Identity (Identity)
 import Data.Kind (Type)
 import Data.Tag.Internal (Tag)
 

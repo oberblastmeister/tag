@@ -1,9 +1,10 @@
 module TagSpec where
 
-import Data.Type.Equality ((:~:) (..))
+import Data.Functor.Identity (Identity (..))
 import Data.Tag (Tag, (:>))
 import Data.Tag qualified as Tag
 import Data.Tag.Sum
+import Data.Type.Equality ((:~:) (..))
 import Test.Hspec
 
 type T1 = [Int, Bool, Word, String, Char]
@@ -49,7 +50,7 @@ spec = do
       testing (Tag.inject @Char @T1) 'b' `shouldBe` 'a'
 
     it "should have Has" do
-      let showX :: Sum T1 -> String
+      let showX :: Sum Identity T1 -> String
           showX (t :=> x) = Tag.has @Show @T1 t (show x)
-      showX (Tag.inject @Int @T1 :=> 1) `shouldBe` show @Int 1
-      showX (Tag.inject @Bool @T1 :=> True) `shouldBe` show @Bool True
+      showX (Tag.inject @Int @T1 :=> Identity 1) `shouldBe` show @(Identity Int) (Identity 1)
+      showX (Tag.inject @Bool @T1 :=> Identity True) `shouldBe` show @(Identity Bool) (Identity True)
