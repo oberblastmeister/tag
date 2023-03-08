@@ -81,7 +81,10 @@ library
   hs-source-dirs: src
   exposed-modules:
     Data.Tag
+      Data.Tag.Unsafe
       Data.Tag.Sum
+      Data.Tag.TagMap
+        Data.Tag.TagMap.Internal
       Data.Tag.Vec
         Data.Tag.Vec.Internal
       Data.Tag.Internal

@@ -1,10 +1,11 @@
-module Data.Tag.Map.Internal where
+module Data.Tag.TagMap.Internal where
 
 import Data.IntMap (IntMap)
 import qualified Data.IntMap as IM
 import Data.Kind (Type)
 import Data.Tag.Internal (Tag (..))
 import Data.Tag.Internal.Utils
+import Data.Tag.Sum (Sum (..))
 import GHC.Exts (Any)
 
 type role Map nominal nominal
@@ -25,3 +26,6 @@ lookup :: Tag xs x -> Map xs f -> Maybe (f x)
 lookup (UnsafeTag n) (UnsafeMap m) = case IM.lookup n m of
   Nothing -> Nothing
   Just x -> Just (unsafeFromAny x)
+
+toList :: Map xs f -> [Sum xs f]
+toList (UnsafeMap m) = map (\(n, x) -> UnsafeTag n :=> unsafeFromAny x) (IM.toList m)
