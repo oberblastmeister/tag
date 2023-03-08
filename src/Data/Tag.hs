@@ -3,7 +3,7 @@ module Data.Tag (module X) where
 import Data.Tag.Internal as X
   ( Has (..),
     STag (..),
-    Tag (..),
+    Tag (tag),
     absurd,
     inject,
     project,

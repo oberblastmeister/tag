@@ -67,7 +67,7 @@ instance Has c '[] where
 type Has' (c :: k -> Constraint) xs (g :: k' -> k) = Has (ComposeC c g) xs
 
 has' :: forall c g xs a r. (Has' c xs g) => Tag xs a -> (c (g a) => r) -> r
-has' = has @(ComposeC c g)
+has' t r = has @(ComposeC c g) t r
 
 instance (c x, Has c xs) => Has (c :: k -> Constraint) (x ': xs) where
   has This r = r
