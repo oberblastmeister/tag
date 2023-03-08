@@ -115,13 +115,3 @@ test-suite tag-test
     hspec-discover:hspec-discover,
   if impl(ghc >= 9.2.2)
     ghc-options: -fcheck-prim-bounds
-
-benchmark bench
-  import: common-options, rtsopts
-  type: exitcode-stdio-1.0
-  hs-source-dirs: bench
-  main-is: Main.hs
-  other-modules:
-  ghc-options: -O2
-  build-depends:
-    tag
