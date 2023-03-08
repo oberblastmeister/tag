@@ -24,7 +24,7 @@ class (:>) (x :: Type) (xs :: [Type]) where
 
 instance
   TypeError
-    ( Text "The type '" :<>: ShowType e :<>: Text "' is not in the list"
+    ( Text "The type '" :<>: ShowType x :<>: Text "' is not in the list"
     ) =>
   x :> '[]
   where
