@@ -1,7 +1,7 @@
 module Data.Tag.Map.Internal where
 
 import Data.IntMap (IntMap)
-import Data.IntMap qualified as IM
+import qualified Data.IntMap as IM
 import Data.Kind (Type)
 import Data.Tag.Internal (Tag (..))
 import Data.Tag.Internal.Utils

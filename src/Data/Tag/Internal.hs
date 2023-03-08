@@ -9,17 +9,17 @@ import Data.GADT.Compare
   )
 import Data.GADT.DeepSeq (GNFData (grnf))
 import Data.GADT.Show (GShow)
-import Data.GADT.Show qualified
+import qualified Data.GADT.Show
 import Data.Hashable (Hashable (..))
 import Data.Kind (Constraint, Type)
 import Data.Tag.Internal.Utils
 import Type.Reflection ((:~:) (..))
-import Unsafe.Coerce qualified
+import qualified Unsafe.Coerce
 
 type role Tag nominal nominal
 
-type Tag :: [Type] -> Type -> Type
-newtype Tag xs x = UnsafeTag {tag :: Int}
+newtype Tag :: [Type] -> Type -> Type where
+  UnsafeTag :: {tag :: Int} -> Tag xs x
 
 data STag :: [Type] -> Type -> Type where
   SThis :: STag (x : xs) x

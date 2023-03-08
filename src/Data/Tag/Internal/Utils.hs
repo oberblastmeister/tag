@@ -6,7 +6,7 @@ module Data.Tag.Internal.Utils where
 import Data.Kind (Type)
 import GHC.Exts (Any)
 import GHC.TypeLits
-import Unsafe.Coerce qualified
+import qualified Unsafe.Coerce
 
 class Length (xs :: [Type]) where
   reifyLength :: Int

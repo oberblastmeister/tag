@@ -2,7 +2,7 @@ module TagSpec where
 
 import Data.Functor.Identity (Identity (..))
 import Data.Tag (Tag, (:>))
-import Data.Tag qualified as Tag
+import qualified Data.Tag as Tag
 import Data.Tag.Sum
 import Data.Type.Equality ((:~:) (..))
 import Test.Hspec
@@ -11,13 +11,13 @@ type T1 = [Int, Bool, Word, String, Char]
 
 spec :: Spec
 spec = do
-  describe "inject" do
-    it "should inject" do
+  describe "inject" $ do
+    it "should inject" $ do
       Tag.inject @Int @T1 `shouldBe` Tag.This
       Tag.inject @Word @T1 `shouldBe` Tag.That (Tag.That Tag.This)
       Tag.inject @Char @T1 `shouldBe` Tag.That (Tag.That (Tag.That (Tag.That Tag.This)))
 
-    it "should project" do
+    it "should project" $ do
       let testing :: forall xs x. (Int :> xs, String :> xs, Bool :> xs) => Tag xs x -> x -> x
           testing t v = case Tag.project @Int @x @xs t of
             Just Refl -> do
@@ -31,7 +31,7 @@ spec = do
       testing (Tag.inject @String @T1) "world" `shouldBe` "hello world"
       testing (Tag.inject @Bool @T1) False `shouldBe` True
 
-    it "should pattern match" do
+    it "should pattern match" $ do
       let testing :: Tag T1 x -> x -> x
           testing t v = case t of
             Tag.This -> 1 + v
@@ -49,7 +49,7 @@ spec = do
       testing (Tag.inject @Bool @T1) False `shouldBe` True
       testing (Tag.inject @Char @T1) 'b' `shouldBe` 'a'
 
-    it "should have Has" do
+    it "should have Has" $ do
       let showX :: Sum Identity T1 -> String
           showX (t :=> x) = Tag.has @Show @T1 t (show x)
       showX (Tag.inject @Int @T1 :=> Identity 1) `shouldBe` show @(Identity Int) (Identity 1)

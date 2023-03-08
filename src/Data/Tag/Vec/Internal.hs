@@ -3,7 +3,7 @@ module Data.Tag.Vec.Internal where
 import Control.Monad.Primitive (PrimMonad)
 import Control.Monad.ST (runST)
 import Data.Kind (Type)
-import Data.Primitive qualified as Primitive
+import qualified Data.Primitive as Primitive
 import Data.Tag.Internal
 import Data.Tag.Internal.Utils
 import GHC.Exts (Any)
@@ -38,7 +38,7 @@ forM_ (UnsafeVec arr) f = do
   go 0
 
 map :: forall xs f g. Vec f xs -> (forall x. Tag xs x -> f x -> g x) -> Vec g xs
-map (UnsafeVec arr) f = runST do
+map (UnsafeVec arr) f = runST $ do
   let len = Primitive.sizeofSmallArray arr
   marr <- Primitive.newSmallArray @_ @Any len undefined
   let go i
