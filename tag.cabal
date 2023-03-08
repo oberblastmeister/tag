@@ -60,8 +60,6 @@ common common-options
     -Wall
     -Wredundant-constraints
     -Wno-name-shadowing
-    -- until OverloadedRecordUpdate stabilizes
-    -Wno-ambiguous-fields
     -Wno-unticked-promoted-constructors
     -Wno-partial-type-signatures
     -Werror=incomplete-patterns

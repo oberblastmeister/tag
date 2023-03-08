@@ -1,3 +1,5 @@
+{-# LANGUAGE AllowAmbiguousTypes #-}
+
 module Data.Tag.Internal where
 
 import Control.DeepSeq (NFData (rnf))
