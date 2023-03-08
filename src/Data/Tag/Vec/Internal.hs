@@ -26,6 +26,9 @@ replicateM f = do
         | otherwise = UnsafeVec <$> Primitive.unsafeFreezeSmallArray marr
   go 0
 
+replicate :: forall xs f. Length xs => (forall x. Tag xs x -> f x) -> Vec xs f
+replicate f = runST $ replicateM $ pure . f
+
 forM_ :: forall xs f m. Monad m => Vec xs f -> (forall x. Tag xs x -> f x -> m ()) -> m ()
 forM_ (UnsafeVec arr) f = do
   let go i
@@ -38,17 +41,7 @@ forM_ (UnsafeVec arr) f = do
   go 0
 
 map :: forall xs f g. Vec xs f -> (forall x. Tag xs x -> f x -> g x) -> Vec xs g
-map (UnsafeVec arr) f = runST $ do
-  let len = Primitive.sizeofSmallArray arr
-  marr <- Primitive.newSmallArray @_ @Any len undefined
-  let go i
-        | i < len = do
-            res <- Primitive.indexSmallArrayM arr i
-            let res' = f (UnsafeTag i) (unsafeFromAny @_ res)
-            Primitive.writeSmallArray marr i (unsafeToAny res')
-            go (i + 1)
-        | otherwise = UnsafeVec <$> Primitive.unsafeFreezeSmallArray marr
-  go 0
+map vec f = runST $ mapM_ vec $ \tag x -> pure $ f tag x
 
 mapM_ :: forall xs f g m. PrimMonad m => Vec xs f -> (forall x. Tag xs x -> f x -> m (g x)) -> m (Vec xs g)
 mapM_ (UnsafeVec arr) f = do

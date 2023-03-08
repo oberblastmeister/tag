@@ -4,6 +4,7 @@ import Data.Functor.Identity (Identity (..))
 import Data.Tag (Tag, (:>))
 import qualified Data.Tag as Tag
 import Data.Tag.Sum
+import qualified Data.Tag.Vec as Tag.Vec
 import Data.Type.Equality ((:~:) (..))
 import Test.Hspec
 
@@ -11,7 +12,31 @@ type T1 = [Int, Bool, Word, String, Char]
 
 spec :: Spec
 spec = do
-  describe "inject" $ do
+  describe "vec" $ do
+    it "smoke" $ do
+      let v =
+            Tag.Vec.replicate @T1 $
+              Identity . \case
+                Tag.This -> 5
+                Tag.That t -> case t of
+                  Tag.This -> True
+                  Tag.That t -> case t of
+                    Tag.This -> 6
+                    Tag.That t -> case t of
+                      Tag.This -> "hello"
+                      Tag.That t -> case t of
+                        Tag.This -> 'a'
+                        Tag.That t -> Tag.absurd t
+      Tag.Vec.lookup Tag.This v `shouldBe` Identity 5
+      Tag.Vec.lookup (Tag.That Tag.This) v `shouldBe` Identity True
+      Tag.Vec.lookup (Tag.That (Tag.That Tag.This)) v `shouldBe` Identity 6
+      Tag.Vec.lookup (Tag.That (Tag.That (Tag.That Tag.This))) v `shouldBe` Identity "hello"
+      Tag.Vec.lookup (Tag.That (Tag.That (Tag.That (Tag.That Tag.This)))) v `shouldBe` Identity 'a'
+      Tag.Vec.lookup (Tag.inject @Bool) v `shouldBe` Identity True
+      Tag.Vec.lookup (Tag.inject @Word) v `shouldBe` Identity 6
+      Tag.Vec.forM_ v $ \tag x -> Tag.has @Show tag (print x)
+
+  describe "tag" $ do
     it "should inject" $ do
       Tag.inject @Int @T1 `shouldBe` Tag.This
       Tag.inject @Word @T1 `shouldBe` Tag.That (Tag.That Tag.This)

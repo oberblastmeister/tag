@@ -7,4 +7,5 @@ import Data.Tag.Vec.Internal as X
     map,
     mapM_,
     replicateM,
+    replicate,
   )
