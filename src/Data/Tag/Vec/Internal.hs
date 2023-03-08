@@ -11,10 +11,10 @@ import Prelude hiding (lookup, map, mapM_)
 
 type role Vec nominal nominal
 
-newtype Vec :: (Type -> Type) -> [Type] -> Type where
-  UnsafeVec :: Primitive.SmallArray Any -> Vec f xs
+newtype Vec :: [Type] -> (Type -> Type) -> Type where
+  UnsafeVec :: Primitive.SmallArray Any -> Vec xs f
 
-replicateM :: forall xs f m. (PrimMonad m, Length xs) => (forall x. Tag xs x -> m (f x)) -> m (Vec f xs)
+replicateM :: forall xs f m. (PrimMonad m, Length xs) => (forall x. Tag xs x -> m (f x)) -> m (Vec xs f)
 replicateM f = do
   let len = reifyLength @xs
   marr <- Primitive.newSmallArray len undefined
@@ -26,7 +26,7 @@ replicateM f = do
         | otherwise = UnsafeVec <$> Primitive.unsafeFreezeSmallArray marr
   go 0
 
-forM_ :: forall xs f m. Monad m => Vec f xs -> (forall x. Tag xs x -> f x -> m ()) -> m ()
+forM_ :: forall xs f m. Monad m => Vec xs f -> (forall x. Tag xs x -> f x -> m ()) -> m ()
 forM_ (UnsafeVec arr) f = do
   let go i
         | i < len = do
@@ -37,7 +37,7 @@ forM_ (UnsafeVec arr) f = do
       len = Primitive.sizeofSmallArray arr
   go 0
 
-map :: forall xs f g. Vec f xs -> (forall x. Tag xs x -> f x -> g x) -> Vec g xs
+map :: forall xs f g. Vec xs f -> (forall x. Tag xs x -> f x -> g x) -> Vec xs g
 map (UnsafeVec arr) f = runST $ do
   let len = Primitive.sizeofSmallArray arr
   marr <- Primitive.newSmallArray @_ @Any len undefined
@@ -50,7 +50,7 @@ map (UnsafeVec arr) f = runST $ do
         | otherwise = UnsafeVec <$> Primitive.unsafeFreezeSmallArray marr
   go 0
 
-mapM_ :: forall xs f g m. PrimMonad m => Vec f xs -> (forall x. Tag xs x -> f x -> m (g x)) -> m (Vec g xs)
+mapM_ :: forall xs f g m. PrimMonad m => Vec xs f -> (forall x. Tag xs x -> f x -> m (g x)) -> m (Vec xs g)
 mapM_ (UnsafeVec arr) f = do
   let len = Primitive.sizeofSmallArray arr
   marr <- Primitive.newSmallArray @_ @Any len undefined
@@ -63,6 +63,6 @@ mapM_ (UnsafeVec arr) f = do
         | otherwise = UnsafeVec <$> Primitive.unsafeFreezeSmallArray marr
   go 0
 
-lookup :: Tag xs x -> Vec f xs -> f x
+lookup :: Tag xs x -> Vec xs f -> f x
 lookup (UnsafeTag i) (UnsafeVec arr) = unsafeFromAny @_ $ Primitive.indexSmallArray arr i
 {-# INLINE lookup #-}

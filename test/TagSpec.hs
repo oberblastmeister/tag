@@ -50,7 +50,7 @@ spec = do
       testing (Tag.inject @Char @T1) 'b' `shouldBe` 'a'
 
     it "should have Has" $ do
-      let showX :: Sum Identity T1 -> String
+      let showX :: Sum T1 Identity -> String
           showX (t :=> x) = Tag.has @Show @T1 t (show x)
       showX (Tag.inject @Int @T1 :=> Identity 1) `shouldBe` show @(Identity Int) (Identity 1)
       showX (Tag.inject @Bool @T1 :=> Identity True) `shouldBe` show @(Identity Bool) (Identity True)

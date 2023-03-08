@@ -20,10 +20,10 @@ import qualified Unsafe.Coerce
 
 type role Tag nominal nominal
 
-newtype Tag :: [Type] -> Type -> Type where
+newtype Tag :: [k] -> k -> Type where
   UnsafeTag :: {tag :: Int} -> Tag xs x
 
-data STag :: [Type] -> Type -> Type where
+data STag :: [k] -> k -> Type where
   SThis :: STag (x : xs) x
   SThat :: Tag xs x -> STag (y : xs) x
 
@@ -57,13 +57,19 @@ project (UnsafeTag tag) =
 absurd :: Tag '[] x -> a
 absurd = undefined
 
-class Has (c :: Type -> Constraint) (xs :: [Type]) where
+class Has c xs where
   has :: Tag xs x -> (c x => r) -> r
 
 instance Has c '[] where
   has u _ = absurd u
 
-instance (c x, Has c xs) => Has c (x ': xs) where
+-- | The constraint @Has' c f g@ means that given a value of type @f a@, we can satisfy the constraint @c (g a)@.
+type Has' (c :: k -> Constraint) xs (g :: k' -> k) = Has (ComposeC c g) xs
+
+has' :: forall c g xs a r. (Has' c xs g) => Tag xs a -> (c (g a) => r) -> r
+has' k r = has @(ComposeC c g) k r
+
+instance (c x, Has c xs) => Has (c :: k -> Constraint) (x ': xs) where
   has This r = r
   has (That t) r = has @c @xs t r
 
