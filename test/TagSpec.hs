@@ -4,7 +4,7 @@ import Data.Functor.Identity (Identity (..))
 import Data.Tag (Tag, (:>))
 import qualified Data.Tag as Tag
 import Data.Tag.Sum
-import qualified Data.Tag.Vec as Tag.Vec
+import qualified Data.Tag.Rec as Tag.Rec
 import Data.Type.Equality ((:~:) (..))
 import Test.Hspec
 
@@ -15,7 +15,7 @@ spec = do
   describe "vec" $ do
     it "smoke" $ do
       let v =
-            Tag.Vec.replicate @T1 $
+            Tag.Rec.replicate @T1 $
               Identity . \case
                 Tag.This -> 5
                 Tag.That t -> case t of
@@ -27,14 +27,14 @@ spec = do
                       Tag.That t -> case t of
                         Tag.This -> 'a'
                         Tag.That t -> Tag.absurd t
-      Tag.Vec.lookup Tag.This v `shouldBe` Identity 5
-      Tag.Vec.lookup (Tag.That Tag.This) v `shouldBe` Identity True
-      Tag.Vec.lookup (Tag.That (Tag.That Tag.This)) v `shouldBe` Identity 6
-      Tag.Vec.lookup (Tag.That (Tag.That (Tag.That Tag.This))) v `shouldBe` Identity "hello"
-      Tag.Vec.lookup (Tag.That (Tag.That (Tag.That (Tag.That Tag.This)))) v `shouldBe` Identity 'a'
-      Tag.Vec.lookup (Tag.inject @Bool) v `shouldBe` Identity True
-      Tag.Vec.lookup (Tag.inject @Word) v `shouldBe` Identity 6
-      Tag.Vec.forM_ v $ \tag x -> Tag.has @Show tag (print x)
+      Tag.Rec.lookup Tag.This v `shouldBe` Identity 5
+      Tag.Rec.lookup (Tag.That Tag.This) v `shouldBe` Identity True
+      Tag.Rec.lookup (Tag.That (Tag.That Tag.This)) v `shouldBe` Identity 6
+      Tag.Rec.lookup (Tag.That (Tag.That (Tag.That Tag.This))) v `shouldBe` Identity "hello"
+      Tag.Rec.lookup (Tag.That (Tag.That (Tag.That (Tag.That Tag.This)))) v `shouldBe` Identity 'a'
+      Tag.Rec.lookup (Tag.inject @Bool) v `shouldBe` Identity True
+      Tag.Rec.lookup (Tag.inject @Word) v `shouldBe` Identity 6
+      Tag.Rec.forM_ v $ \tag x -> Tag.has @Show tag (print x)
 
   describe "tag" $ do
     it "should inject" $ do
