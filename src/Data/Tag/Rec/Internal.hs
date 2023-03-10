@@ -1,4 +1,4 @@
-module Data.Tag.Vec.Internal where
+module Data.Tag.Rec.Internal where
 
 import Control.Monad.Primitive (PrimMonad)
 import Control.Monad.ST (runST)

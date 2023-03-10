@@ -1,6 +1,6 @@
-module Data.Tag.Vec (module X) where
+module Data.Tag.Rec (module X) where
 
-import Data.Tag.Vec.Internal as X
+import Data.Tag.Rec.Internal as X
   ( Vec (..),
     forM_,
     lookup,

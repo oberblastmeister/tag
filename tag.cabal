@@ -83,10 +83,10 @@ library
     Data.Tag
       Data.Tag.Unsafe
       Data.Tag.Sum
-      Data.Tag.TagMap
-        Data.Tag.TagMap.Internal
-      Data.Tag.Vec
-        Data.Tag.Vec.Internal
+      Data.Tag.Map
+        Data.Tag.Map.Internal
+      Data.Tag.Rec
+        Data.Tag.Rec.Internal
       Data.Tag.Internal
       Data.Tag.Internal.Utils
 

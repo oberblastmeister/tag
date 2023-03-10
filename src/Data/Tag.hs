@@ -7,6 +7,7 @@ import Data.Tag.Internal as X
     absurd,
     inject,
     project,
+    weaken,
     tagSing,
     pattern That,
     pattern This,

@@ -1,4 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE UndecidableInstances #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 
 module Data.Tag.Internal where
 
@@ -15,6 +17,7 @@ import qualified Data.GADT.Show
 import Data.Hashable (Hashable (..))
 import Data.Kind (Constraint, Type)
 import Data.Tag.Internal.Utils
+import GHC.TypeLits (type (-))
 import Type.Reflection ((:~:) (..))
 import qualified Unsafe.Coerce
 
@@ -53,6 +56,10 @@ project (UnsafeTag tag) =
     then Just (Unsafe.Coerce.unsafeCoerce Refl)
     else Nothing
 {-# INLINE project #-}
+
+weaken :: Tag xs x -> Tag (y ': xs) x
+weaken (UnsafeTag n) = UnsafeTag (n + 1)
+{-# INLINE weaken #-}
 
 absurd :: Tag '[] x -> a
 absurd = undefined

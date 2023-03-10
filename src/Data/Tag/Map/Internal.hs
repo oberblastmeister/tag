@@ -1,4 +1,4 @@
-module Data.Tag.TagMap.Internal where
+module Data.Tag.Map.Internal where
 
 import Data.IntMap (IntMap)
 import qualified Data.IntMap as IM
