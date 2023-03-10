@@ -1,7 +1,7 @@
 module Data.Tag.Rec (module X) where
 
 import Data.Tag.Rec.Internal as X
-  ( Vec (..),
+  ( Rec (..),
     forM_,
     lookup,
     map,

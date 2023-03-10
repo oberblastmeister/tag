@@ -12,7 +12,7 @@ type T1 = [Int, Bool, Word, String, Char]
 
 spec :: Spec
 spec = do
-  describe "vec" $ do
+  describe "rec" $ do
     it "smoke" $ do
       let v =
             Tag.Rec.replicate @T1 $
