@@ -17,7 +17,6 @@ import qualified Data.GADT.Show
 import Data.Hashable (Hashable (..))
 import Data.Kind (Constraint, Type)
 import Data.Tag.Internal.Utils
-import GHC.TypeLits (type (-))
 import Type.Reflection ((:~:) (..))
 import qualified Unsafe.Coerce
 
@@ -33,6 +32,7 @@ data STag :: [k] -> k -> Type where
 tagSing :: Tag xs x -> STag xs x
 tagSing (UnsafeTag 0) = Unsafe.Coerce.unsafeCoerce SThis
 tagSing (UnsafeTag n) = Unsafe.Coerce.unsafeCoerce (SThat (UnsafeTag (n - 1)))
+{-# INLINE tagSing #-}
 
 pattern This :: () => (x : xs') ~ xs => Tag xs x
 pattern This <- (tagSing -> SThis)

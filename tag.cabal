@@ -85,8 +85,8 @@ library
       Data.Tag.Sum
       Data.Tag.Map
         Data.Tag.Map.Internal
-      Data.Tag.Rec
-        Data.Tag.Rec.Internal
+      Data.Tag.Vec
+        Data.Tag.Vec.Internal
       Data.Tag.Internal
       Data.Tag.Internal.Utils
 
