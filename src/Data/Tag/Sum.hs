@@ -9,7 +9,7 @@ import qualified Data.Tag.Internal as Tag
 import Data.Tag.Internal.Utils ((:>))
 import Data.Type.Equality ((:~:) (..))
 
-data Sum :: [Type] -> (Type -> Type) -> Type where
+data Sum :: [k] -> (k -> Type) -> Type where
   (:=>) :: !(Tag xs x) -> f x -> Sum xs f
 
 instance (Has' Show xs f) => Show (Sum xs f) where

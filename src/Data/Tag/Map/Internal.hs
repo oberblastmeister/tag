@@ -10,7 +10,7 @@ import GHC.Exts (Any)
 
 type role Map nominal nominal
 
-newtype Map :: [Type] -> (Type -> Type) -> Type where
+newtype Map :: [k] -> (k -> Type) -> Type where
   UnsafeMap :: IntMap Any -> Map f xs
 
 empty :: Map xs f

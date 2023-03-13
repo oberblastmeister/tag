@@ -11,7 +11,7 @@ import Prelude hiding (lookup, map, mapM_)
 
 type role Vec nominal nominal
 
-newtype Vec :: [Type] -> (Type -> Type) -> Type where
+newtype Vec :: [k] -> (k -> Type) -> Type where
   UnsafeVec :: Primitive.SmallArray Any -> Vec xs f
 
 replicateM :: forall xs f m. (PrimMonad m, Length xs) => (forall x. Tag xs x -> m (f x)) -> m (Vec xs f)
